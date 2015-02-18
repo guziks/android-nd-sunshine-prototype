@@ -27,8 +27,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ForecastFragment extends Fragment {
+
+    private ArrayAdapter<String> adapterForecast;
 
     public ForecastFragment() {
     }
@@ -62,21 +66,16 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ArrayList<String> weekForecast;
-        weekForecast = new ArrayList<>();
-        weekForecast.add("Today-Sunny-88/63");
-        weekForecast.add("Tomorrow-Foggy-70/46");
-        weekForecast.add("Weds-Cloudy-72/63");
-        weekForecast.add("Thurs-Rainy-64/51");
-        weekForecast.add("Fri-Foggy-70/46");
-        weekForecast.add("Sat-Sunny-76/68");
+       List<String> forecastList = new ArrayList<String>(Arrays.asList(
+                    new String[] {"---","---","---","---","---","---","---"}
+               )
+       );
 
-        ArrayAdapter<String> adapterForecast;
         adapterForecast = new ArrayAdapter<>(
                 getActivity(),
                 R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview,
-                weekForecast);
+                forecastList);
 
         ListView listViewForecast = (ListView) rootView.findViewById(R.id.listview_forecast);
         listViewForecast.setAdapter(adapterForecast);
@@ -186,6 +185,14 @@ public class ForecastFragment extends Fragment {
             }
             return resultStrs;
 
+        }
+
+        @Override
+        protected void onPostExecute(String[] strings) {
+            super.onPostExecute(strings);
+            adapterForecast.clear();
+            adapterForecast.addAll(Arrays.asList(strings));
+            adapterForecast.notifyDataSetChanged();
         }
 
         @Override
