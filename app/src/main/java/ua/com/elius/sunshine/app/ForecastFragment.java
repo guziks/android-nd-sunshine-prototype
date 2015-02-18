@@ -1,10 +1,14 @@
 package ua.com.elius.sunshine.app;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -21,6 +25,30 @@ import java.util.ArrayList;
 public class ForecastFragment extends Fragment {
 
     public ForecastFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.forecast_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_refresh) {
+            String forecastLocation = "Sumy,ua";
+            FetchWeatherTask weatherTask = new FetchWeatherTask();
+            weatherTask.execute(forecastLocation,null,null);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -50,23 +78,39 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
-    public class FetchWeatherTask extends AsyncTask<String, Void, String> {
+    public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
+
+        private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
         @Override
-        protected String doInBackground(String... urls) {
+        protected Void doInBackground(String... params) {
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
 
             // Will contain the raw JSON response as a string.
-            String forecastJsonStr = null;
+            String forecastJsonStr;
 
             try {
+                Uri.Builder forecastURI = new Uri.Builder();
+                forecastURI.scheme("http");
+                forecastURI.authority("api.openweathermap.org");
+                forecastURI.appendPath("data");
+                forecastURI.appendPath("2.5");
+                forecastURI.appendPath("forecast");
+                forecastURI.appendPath("daily");
+                forecastURI.appendQueryParameter("q", params[0]);
+                forecastURI.appendQueryParameter("units", "metric");
+                forecastURI.appendQueryParameter("cnt", "7");
+
+                Log.v(LOG_TAG, "Builded URI: " + forecastURI.build());
+
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are available at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=Sumy,ua&units=metric&cnt=7");
+                // new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=Sumy,ua&units=metric&cnt=7");
+                URL url = new URL(forecastURI.build().toString());
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -78,7 +122,7 @@ public class ForecastFragment extends Fragment {
                 StringBuffer buffer = new StringBuffer();
                 if (inputStream == null) {
                     // Nothing to do.
-                    forecastJsonStr = null;
+                    return null;
                 }
                 reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -92,14 +136,16 @@ public class ForecastFragment extends Fragment {
 
                 if (buffer.length() == 0) {
                     // Stream was empty.  No point in parsing.
-                    forecastJsonStr = null;
+                    return null;
                 }
                 forecastJsonStr = buffer.toString();
+
+                Log.v(LOG_TAG, "Forecast JSON string: " + forecastJsonStr);
             } catch (IOException e) {
-                Log.e("PlaceholderFragment", "Error ", e);
+                Log.e(LOG_TAG, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attempting
                 // to parse it.
-                forecastJsonStr = null;
+                return null;
             } finally{
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -108,11 +154,11 @@ public class ForecastFragment extends Fragment {
                     try {
                         reader.close();
                     } catch (final IOException e) {
-                        Log.e("PlaceholderFragment", "Error closing stream", e);
+                        Log.e("LOG_TAG", "Error closing stream", e);
                     }
                 }
             }
-            return forecastJsonStr;
+            return null;
         }
     }
 }
