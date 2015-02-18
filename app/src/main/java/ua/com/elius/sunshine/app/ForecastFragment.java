@@ -126,7 +126,7 @@ public class ForecastFragment extends Fragment {
             final String OWM_TEMPERATURE = "temp";
             final String OWM_MAX = "max";
             final String OWM_MIN = "min";
-            final String OWM_DESCRIPTION = "main";
+            final String OWM_DESCRIPTION = "description";
 
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
             JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
@@ -177,7 +177,7 @@ public class ForecastFragment extends Fragment {
                 double low = temperatureObject.getDouble(OWM_MIN);
 
                 highAndLow = formatHighLows(high, low);
-                resultStrs[i] = day + " - " + description + " - " + highAndLow;
+                resultStrs[i] = day + " : " + description + " : " + highAndLow;
             }
 
             for (String s : resultStrs) {
@@ -218,6 +218,7 @@ public class ForecastFragment extends Fragment {
                 forecastURI.appendQueryParameter("q", params[0]);
                 forecastURI.appendQueryParameter("units", "metric");
                 forecastURI.appendQueryParameter("cnt", Integer.toString(DAYS_AMOUNT));
+                forecastURI.appendQueryParameter("lang", "ru");
 
                 Log.v(LOG_TAG, "Builded URI: " + forecastURI.build());
 
