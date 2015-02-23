@@ -191,7 +191,9 @@ public class ForecastFragment extends Fragment {
         protected void onPostExecute(String[] strings) {
             super.onPostExecute(strings);
             adapterForecast.clear();
-            adapterForecast.addAll(Arrays.asList(strings));
+            for (String s: strings) {
+                adapterForecast.add(s);
+            }
             adapterForecast.notifyDataSetChanged();
         }
 
