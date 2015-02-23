@@ -89,10 +89,8 @@ public class ForecastFragment extends Fragment {
 //                        adapterForecast.getItem(position),
 //                        Toast.LENGTH_SHORT
 //                ).show();
-                String detailForecast = adapterForecast.getItem(position);
-                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
-                detailIntent.putExtra(Intent.EXTRA_TEXT, detailForecast);
-                startActivity(detailIntent);
+                startActivity(new Intent(getActivity(), DetailActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, adapterForecast.getItem(position)));
             }
         } );
 
