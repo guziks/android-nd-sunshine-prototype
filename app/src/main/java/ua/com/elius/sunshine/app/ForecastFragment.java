@@ -1,5 +1,6 @@
 package ua.com.elius.sunshine.app;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,11 +84,15 @@ public class ForecastFragment extends Fragment {
         listViewForecast.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(
-                        getActivity(),
-                        adapterForecast.getItem(position),
-                        Toast.LENGTH_SHORT
-                ).show();
+//                Toast.makeText(
+//                        getActivity(),
+//                        adapterForecast.getItem(position),
+//                        Toast.LENGTH_SHORT
+//                ).show();
+                String detailForecast = adapterForecast.getItem(position);
+                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+                detailIntent.putExtra(Intent.EXTRA_TEXT, detailForecast);
+                startActivity(detailIntent);
             }
         } );
 
