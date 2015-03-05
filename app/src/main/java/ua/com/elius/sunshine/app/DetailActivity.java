@@ -1,5 +1,6 @@
 package ua.com.elius.sunshine.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -8,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class DetailActivity extends ActionBarActivity {
@@ -18,11 +21,10 @@ public class DetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new DetailFragment())
                     .commit();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -46,18 +48,24 @@ public class DetailActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    public static class DetailFragment extends Fragment {
 
-        public PlaceholderFragment() {
+        public DetailFragment() {
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+//            CharSequence detailForecast = getActivity().getIntent().getExtras().getCharSequence(Intent.EXTRA_TEXT);
+            String detailForecast = getActivity().getIntent().getStringExtra(Intent.EXTRA_TEXT);
+
+            Toast.makeText(getActivity(), detailForecast, Toast.LENGTH_LONG).show();
+
+            TextView detailText = (TextView) rootView.findViewById(R.id.detail_text);
+            detailText.setText(detailForecast);
+
             return rootView;
         }
     }
