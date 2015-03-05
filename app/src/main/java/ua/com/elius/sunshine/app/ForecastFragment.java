@@ -57,6 +57,7 @@ public class ForecastFragment extends Fragment {
             String forecastLocation = "Sumy,ua";
             FetchWeatherTask weatherTask = new FetchWeatherTask();
             weatherTask.execute(forecastLocation,null,null);
+            Log.v("blah","blah");
             return true;
         } else {
             return super.onOptionsItemSelected(item);
