@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
@@ -54,10 +55,13 @@ public class ForecastFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_refresh) {
-            String forecastLocation = "Sumy,ua";
+            String forecastLocation;
+//            forecastLocation = "Sumy,ua";
+            forecastLocation = PreferenceManager
+                    .getDefaultSharedPreferences(getActivity())
+                    .getString("location","");
             FetchWeatherTask weatherTask = new FetchWeatherTask();
             weatherTask.execute(forecastLocation,null,null);
-            Log.v("blah","blah");
             return true;
         } else {
             return super.onOptionsItemSelected(item);
