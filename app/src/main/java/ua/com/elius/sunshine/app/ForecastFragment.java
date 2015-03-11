@@ -56,10 +56,10 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_refresh) {
             String forecastLocation;
-//            forecastLocation = "Sumy,ua";
             forecastLocation = PreferenceManager
                     .getDefaultSharedPreferences(getActivity())
-                    .getString("location","");
+                    .getString(getString(R.string.pref_location_key),
+                               getString(R.string.pref_location_default));
             FetchWeatherTask weatherTask = new FetchWeatherTask();
             weatherTask.execute(forecastLocation,null,null);
             return true;
