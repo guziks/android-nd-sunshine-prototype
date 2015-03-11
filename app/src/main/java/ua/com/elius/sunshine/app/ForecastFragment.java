@@ -226,6 +226,12 @@ public class ForecastFragment extends Fragment {
 
             final int DAYS_AMOUNT = 7;
 
+            String units;
+            units = PreferenceManager
+                    .getDefaultSharedPreferences(getActivity())
+                    .getString(getString(R.string.pref_units_key),
+                            getString(R.string.pref_units_default));
+
             try {
                 Uri.Builder forecastURI = new Uri.Builder();
                 forecastURI.scheme("http");
@@ -235,7 +241,7 @@ public class ForecastFragment extends Fragment {
                 forecastURI.appendPath("forecast");
                 forecastURI.appendPath("daily");
                 forecastURI.appendQueryParameter("q", params[0]);
-                forecastURI.appendQueryParameter("units", "metric");
+                forecastURI.appendQueryParameter("units", units);
                 forecastURI.appendQueryParameter("cnt", Integer.toString(DAYS_AMOUNT));
                 forecastURI.appendQueryParameter("lang", "ru");
 
