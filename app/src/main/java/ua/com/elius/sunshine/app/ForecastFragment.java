@@ -30,14 +30,28 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ForecastFragment extends Fragment {
 
     private ArrayAdapter<String> adapterForecast;
 
     public ForecastFragment() {
+    }
+
+    private void updateWeather(){
+        String forecastLocation;
+        forecastLocation = PreferenceManager
+                .getDefaultSharedPreferences(getActivity())
+                .getString(getString(R.string.pref_location_key),
+                        getString(R.string.pref_location_default));
+        FetchWeatherTask weatherTask = new FetchWeatherTask();
+        weatherTask.execute(forecastLocation,null,null);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
     }
 
     @Override
@@ -55,13 +69,7 @@ public class ForecastFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_refresh) {
-            String forecastLocation;
-            forecastLocation = PreferenceManager
-                    .getDefaultSharedPreferences(getActivity())
-                    .getString(getString(R.string.pref_location_key),
-                               getString(R.string.pref_location_default));
-            FetchWeatherTask weatherTask = new FetchWeatherTask();
-            weatherTask.execute(forecastLocation,null,null);
+            updateWeather();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -73,27 +81,17 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-       List<String> forecastList = new ArrayList<String>(Arrays.asList(
-                    new String[] {"---","---","---","---","---","---","---"}
-               )
-       );
-
         adapterForecast = new ArrayAdapter<>(
                 getActivity(),
                 R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview,
-                forecastList);
+                new ArrayList<String>());
 
         ListView listViewForecast = (ListView) rootView.findViewById(R.id.listview_forecast);
         listViewForecast.setAdapter(adapterForecast);
         listViewForecast.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(
-//                        getActivity(),
-//                        adapterForecast.getItem(position),
-//                        Toast.LENGTH_SHORT
-//                ).show();
                 startActivity(new Intent(getActivity(), DetailActivity.class)
                         .putExtra(Intent.EXTRA_TEXT, adapterForecast.getItem(position)));
             }
