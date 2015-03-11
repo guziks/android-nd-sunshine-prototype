@@ -118,7 +118,15 @@ public class ForecastFragment extends Fragment {
         /**
          * Prepare the weather high/lows for presentation.
          */
-        private String formatHighLows(double high, double low) {
+        private String formatHighLows(double high, double low, String unitType) {
+
+            if (unitType.equals(getString(R.string.pref_units_imperial))) {
+                high = (high * 1.8) + 32;
+                low = (low * 1.8) + 32;
+            } else if (!unitType.equals(getString(R.string.pref_units_metric))) {
+                Log.d(LOG_TAG, "Unit type not found: " + unitType);
+            }
+
             // For presentation, assume the user doesn't care about tenths of a degree.
             long roundedHigh = Math.round(high);
             long roundedLow = Math.round(low);
@@ -193,7 +201,13 @@ public class ForecastFragment extends Fragment {
                 double high = temperatureObject.getDouble(OWM_MAX);
                 double low = temperatureObject.getDouble(OWM_MIN);
 
-                highAndLow = formatHighLows(high, low);
+                String unitType;
+                unitType = PreferenceManager
+                        .getDefaultSharedPreferences(getActivity())
+                        .getString(getString(R.string.pref_units_key),
+                                getString(R.string.pref_units_default));
+
+                highAndLow = formatHighLows(high, low, unitType);
                 resultStrs[i] = day + " : " + description + " : " + highAndLow;
             }
 
@@ -226,12 +240,6 @@ public class ForecastFragment extends Fragment {
 
             final int DAYS_AMOUNT = 7;
 
-            String units;
-            units = PreferenceManager
-                    .getDefaultSharedPreferences(getActivity())
-                    .getString(getString(R.string.pref_units_key),
-                            getString(R.string.pref_units_default));
-
             try {
                 Uri.Builder forecastURI = new Uri.Builder();
                 forecastURI.scheme("http");
@@ -241,7 +249,7 @@ public class ForecastFragment extends Fragment {
                 forecastURI.appendPath("forecast");
                 forecastURI.appendPath("daily");
                 forecastURI.appendQueryParameter("q", params[0]);
-                forecastURI.appendQueryParameter("units", units);
+                forecastURI.appendQueryParameter("units", "metric");
                 forecastURI.appendQueryParameter("cnt", Integer.toString(DAYS_AMOUNT));
                 forecastURI.appendQueryParameter("lang", "ru");
 
