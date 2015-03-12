@@ -1,7 +1,9 @@
 package ua.com.elius.sunshine.app;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +41,29 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
+        } else {
+            if (id == R.id.action_view_location) {
+
+                String location;
+                location = PreferenceManager
+                        .getDefaultSharedPreferences(this)
+                        .getString(getString(R.string.pref_location_key),
+                                getString(R.string.pref_location_default));
+
+                Uri.Builder locationURI = new Uri.Builder();
+                locationURI.scheme("geo");
+                locationURI.appendPath("0,0");
+                locationURI.appendQueryParameter("q", location);
+
+                Intent viewLocationIntent;
+                viewLocationIntent = new Intent();
+                viewLocationIntent.setAction(Intent.ACTION_VIEW);
+                viewLocationIntent.setData(locationURI.build());
+
+                if (viewLocationIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(viewLocationIntent);
+                }
+            }
         }
 
         return super.onOptionsItemSelected(item);
