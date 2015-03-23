@@ -7,6 +7,7 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_view_location">View Location</string>
     <string name="title_activity_detail">Details</string>
+    <string name="share">Share</string>
 
     <string name="pref_location_label">Location</string>
     <string name="pref_location_key" translatable="false">location</string>

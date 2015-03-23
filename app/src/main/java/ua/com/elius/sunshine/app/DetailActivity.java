@@ -3,7 +3,9 @@ package ua.com.elius.sunshine.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +16,18 @@ import android.widget.Toast;
 
 
 public class DetailActivity extends ActionBarActivity {
+
+    private ShareActionProvider mShareActionProvider;
+
+    private Intent getShareDetailForecastIntent() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+
+        String detailForecast = this.getIntent().getStringExtra(Intent.EXTRA_TEXT);
+        intent.putExtra(Intent.EXTRA_TEXT, detailForecast + " #Sunshineapp");
+
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +44,12 @@ public class DetailActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_detail, menu);
+
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        mShareActionProvider = (ShareActionProvider)
+                MenuItemCompat.getActionProvider(shareItem);
+        mShareActionProvider.setShareIntent(getShareDetailForecastIntent());
+
         return true;
     }
 
