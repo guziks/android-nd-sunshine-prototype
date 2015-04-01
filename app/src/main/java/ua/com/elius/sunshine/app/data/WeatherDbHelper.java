@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.sunshine.app.data;
+package ua.com.elius.sunshine.app.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.android.sunshine.app.data.WeatherContract.LocationEntry;
-import com.example.android.sunshine.app.data.WeatherContract.WeatherEntry;
+import ua.com.elius.sunshine.app.data.WeatherContract.LocationEntry;
+import ua.com.elius.sunshine.app.data.WeatherContract.WeatherEntry;
 
 /**
  * Manages a local database for weather data.

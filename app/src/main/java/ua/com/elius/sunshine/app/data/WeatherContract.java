@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.sunshine.app.data;
+package ua.com.elius.sunshine.app.data;
 
 import android.provider.BaseColumns;
 import android.text.format.Time;
@@ -39,8 +39,11 @@ public class WeatherContract {
         done for WeatherEntry)
      */
     public static final class LocationEntry implements BaseColumns {
-        public static final String TABLE_NAME = "location";
-
+        public static final String TABLE_NAME              = "location";
+        public static final String COLUMN_LOCATION_SETTING = "location_setting";
+        public static final String COLUMN_CITY             = "city_name";
+        public static final String COLUMN_COORD_LAT        = "coord_lat";
+        public static final String COLUMN_COORD_LONG       = "coord_long";
     }
 
     /* Inner class that defines the table contents of the weather table */
