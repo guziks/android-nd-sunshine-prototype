@@ -18,6 +18,7 @@ package ua.com.elius.sunshine.app.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import ua.com.elius.sunshine.app.data.WeatherContract.LocationEntry;
 import ua.com.elius.sunshine.app.data.WeatherContract.WeatherEntry;
@@ -26,6 +27,8 @@ import ua.com.elius.sunshine.app.data.WeatherContract.WeatherEntry;
  * Manages a local database for weather data.
  */
 public class WeatherDbHelper extends SQLiteOpenHelper {
+
+    public static final String LOG_TAG = WeatherDbHelper.class.getSimpleName();
 
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 2;
@@ -69,7 +72,19 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 " UNIQUE (" + WeatherEntry.COLUMN_DATE + ", " +
                 WeatherEntry.COLUMN_LOC_KEY + ") ON CONFLICT REPLACE);";
 
+        final String SQL_CREATE_LOCATION_TABLE = "CREATE TABLE " + LocationEntry.TABLE_NAME + " (" +
+                LocationEntry._ID + " INTEGER PRIMARY KEY," +
+                LocationEntry.COLUMN_LOCATION_SETTING + " TEXT UNIQUE NOT NULL, " +
+                LocationEntry.COLUMN_CITY_NAME + " TEXT NOT NULL, " +
+                LocationEntry.COLUMN_COORD_LAT + " REAL NOT NULL, " +
+                LocationEntry.COLUMN_COORD_LONG + " REAL NOT NULL " +
+                " );";
+
+        Log.d(LOG_TAG, SQL_CREATE_WEATHER_TABLE);
+        Log.d(LOG_TAG, SQL_CREATE_LOCATION_TABLE);
+
         sqLiteDatabase.execSQL(SQL_CREATE_WEATHER_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_LOCATION_TABLE);
     }
 
     @Override
