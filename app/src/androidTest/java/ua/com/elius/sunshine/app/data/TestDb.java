@@ -15,6 +15,7 @@
  */
 package ua.com.elius.sunshine.app.data;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
@@ -112,22 +113,50 @@ public class TestDb extends AndroidTestCase {
     */
     public void testLocationTable() {
         // First step: Get reference to writable database
+        SQLiteDatabase db = new WeatherDbHelper(
+                this.mContext).getWritableDatabase();
 
         // Create ContentValues of what you want to insert
         // (you can use the createNorthPoleLocationValues if you wish)
+        String testLocationSetting = "99705";
+        String testCityName = "North Pole";
+        double testLatitude = 64.7488;
+        double testLongitude = -147.353;
+
+        ContentValues testValues = new ContentValues();
+        testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, testCityName);
+        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, testLatitude);
+        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, testLongitude);
+        testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, testLocationSetting);
 
         // Insert ContentValues into database and get a row ID back
+        long rowID;
+        rowID = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
+        if (rowID == -1) {
+            fail("Fail to insert test values into location table");
+        }
 
         // Query the database and receive a Cursor back
+        Cursor c;
+        c = db.query(WeatherContract.LocationEntry.TABLE_NAME,
+                null,null,null,null,null,null,null
+        );
 
         // Move the cursor to a valid database row
+        c.moveToNext();
+        assertTrue(c.isFirst());
 
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
+        assertEquals(c.getString(1), testLocationSetting);
+        assertEquals(c.getString(2), testCityName);
+        assertEquals(c.getDouble(3), testLatitude);
+        assertEquals(c.getDouble(4), testLongitude);
 
         // Finally, close the cursor and database
-
+        c.close();
+        db.close();
     }
 
     /*
