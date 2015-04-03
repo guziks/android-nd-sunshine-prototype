@@ -112,13 +112,7 @@ public class TestDb extends AndroidTestCase {
         also make use of the ValidateCurrentRecord function from within TestUtilities.
     */
     public void testLocationTable() {
-        // First step: Get reference to writable database
-        SQLiteDatabase db = new WeatherDbHelper(
-                this.mContext).getWritableDatabase();
-
-        insertLocation(db);
-
-        db.close();
+        insertLocation();
     }
 
     /*
@@ -128,17 +122,15 @@ public class TestDb extends AndroidTestCase {
         also make use of the validateCurrentRecord function from within TestUtilities.
      */
     public void testWeatherTable() {
-        // First insert the location, and then use the locationRowId to insert
-        // the weather. Make sure to cover as many failure cases as you can.
-        SQLiteDatabase db = new WeatherDbHelper(
-                this.mContext).getWritableDatabase();
-
         // Instead of rewriting all of the code we've already written in testLocationTable
         // we can move this code to insertLocation and then call insertLocation from both
         // tests. Why move it? We need the code to return the ID of the inserted location
         // and our testLocationTable can only return void because it's a test.
         long locationRowID;
-        locationRowID = insertLocation(db);
+        locationRowID = insertLocation();
+
+        SQLiteDatabase db = new WeatherDbHelper(
+                this.mContext).getWritableDatabase();
 
         // Create ContentValues of what you want to insert
         // (you can use the createWeatherValues TestUtilities function if you wish)
@@ -174,7 +166,11 @@ public class TestDb extends AndroidTestCase {
         code from testLocationTable to here so that you can call this code from both
         testWeatherTable and testLocationTable.
      */
-    public long insertLocation(SQLiteDatabase db) {
+    public long insertLocation() {
+        // First step: Get reference to writable database
+        SQLiteDatabase db = new WeatherDbHelper(
+                this.mContext).getWritableDatabase();
+
         // Create ContentValues of what you want to insert
         // (you can use the createNorthPoleLocationValues if you wish)
         ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
@@ -204,6 +200,7 @@ public class TestDb extends AndroidTestCase {
         assertFalse("Error: More than one record returned from location query", c.moveToNext());
 
         c.close();
+        db.close();
 
         return rowID;
     }
