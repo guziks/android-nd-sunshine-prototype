@@ -118,16 +118,7 @@ public class TestDb extends AndroidTestCase {
 
         // Create ContentValues of what you want to insert
         // (you can use the createNorthPoleLocationValues if you wish)
-        String testLocationSetting = "99705";
-        String testCityName = "North Pole";
-        double testLatitude = 64.7488;
-        double testLongitude = -147.353;
-
-        ContentValues testValues = new ContentValues();
-        testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, testCityName);
-        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, testLatitude);
-        testValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, testLongitude);
-        testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, testLocationSetting);
+        ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
 
         // Insert ContentValues into database and get a row ID back
         long rowID;
@@ -143,16 +134,14 @@ public class TestDb extends AndroidTestCase {
         );
 
         // Move the cursor to a valid database row
-        c.moveToNext();
-        assertTrue(c.isFirst());
+        assertTrue("Error: No Records returned from location query", c.moveToFirst());
 
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
-        assertEquals(c.getString(1), testLocationSetting);
-        assertEquals(c.getString(2), testCityName);
-        assertEquals(c.getDouble(3), testLatitude);
-        assertEquals(c.getDouble(4), testLongitude);
+        TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed", c, testValues);
+
+        assertFalse("Error: More than one record returned from location query", c.moveToNext());
 
         // Finally, close the cursor and database
         c.close();
