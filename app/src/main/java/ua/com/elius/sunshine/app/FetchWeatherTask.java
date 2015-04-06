@@ -25,7 +25,7 @@ import android.text.format.Time;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import com.example.android.sunshine.app.data.WeatherContract.WeatherEntry;
+import ua.com.elius.sunshine.app.data.WeatherContract.WeatherEntry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +40,8 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
+
+import ua.com.elius.sunshine.app.R;
 
 public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 

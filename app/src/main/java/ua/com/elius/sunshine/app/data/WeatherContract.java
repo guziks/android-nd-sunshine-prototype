@@ -127,7 +127,14 @@ public class WeatherContract {
             Student: Fill in this buildWeatherLocation function
          */
         public static Uri buildWeatherLocation(String locationSetting) {
-            return null;
+            Uri.Builder b;
+            b = new Uri.Builder()
+                .scheme("content")
+                .authority("ua.com.elius.sunshine.app")
+                .appendPath("weather")
+                .appendPath(locationSetting);
+
+            return b.build();
         }
 
         public static Uri buildWeatherLocationWithStartDate(
