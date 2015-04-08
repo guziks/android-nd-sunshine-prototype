@@ -15,9 +15,12 @@
  */
 package ua.com.elius.sunshine.app;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -39,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 
+import ua.com.elius.sunshine.app.data.WeatherContract;
 import ua.com.elius.sunshine.app.data.WeatherContract.WeatherEntry;
 
 public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
@@ -109,7 +113,33 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         // Students: First, check if the location with this city name exists in the db
         // If it exists, return the current ID
         // Otherwise, insert it using the content resolver and the base URI
-        return -1;
+        long locationId;
+
+        ContentResolver cr = mContext.getContentResolver();
+        Cursor locationCursor = mContext.getContentResolver().query(
+                WeatherContract.LocationEntry.CONTENT_URI,
+                new String[]{WeatherContract.LocationEntry._ID},
+                WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
+                new String[]{locationSetting},
+                null);
+
+        if (locationCursor.moveToFirst()) {
+            locationId = locationCursor.getLong(0);
+        } else {
+            ContentValues values = new ContentValues();
+            values.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, locationSetting);
+            values.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, cityName);
+            values.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, lat);
+            values.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, lon);
+
+            Uri insertedUri = cr.insert(WeatherContract.LocationEntry.CONTENT_URI, values);
+
+            locationId = ContentUris.parseId(insertedUri);
+        }
+
+        locationCursor.close();
+
+        return locationId;
     }
 
     /*
