@@ -267,21 +267,26 @@ public class WeatherProvider extends ContentProvider {
         // Student: Use the uriMatcher to match the WEATHER and LOCATION URI's we are going to
         // handle.  If it doesn't match these, throw an UnsupportedOperationException.
         final int match = sUriMatcher.match(uri);
-        if (match == -1) throw new UnsupportedOperationException();
 
         // Student: A null value deletes all rows.  In my implementation of this, I only notified
         // the uri listeners (using the content resolver) if the rowsDeleted != 0 or the selection
         // is null.
         // Oh, and you should notify the listeners here.
         int rowsDeleted = 0;
+        if (null == selection) selection = "1";
         switch (match) {
-            case WEATHER: {
-                rowsDeleted = db.delete(WeatherContract.WeatherEntry.TABLE_NAME, null, null);
-            } case LOCATION: {
-                rowsDeleted = db.delete(WeatherContract.LocationEntry.TABLE_NAME, null, null);
-            }
+            case WEATHER:
+                rowsDeleted = db.delete(WeatherContract.WeatherEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case LOCATION:
+                rowsDeleted = db.delete(WeatherContract.LocationEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        getContext().getContentResolver().notifyChange(uri, null);
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
 
         // Student: return the actual rows deleted
         return rowsDeleted;
@@ -301,19 +306,23 @@ public class WeatherProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
         final int match = sUriMatcher.match(uri);
-        if (match == -1) throw new UnsupportedOperationException();
 
-        int rowsUdated = 0;
+        int rowsUpdated = 0;
         switch (match) {
-            case WEATHER: {
-                rowsUdated = db.update(WeatherContract.WeatherEntry.TABLE_NAME, values, selection, selectionArgs);
-            } case LOCATION: {
-                rowsUdated = db.update(WeatherContract.LocationEntry.TABLE_NAME, values, selection, selectionArgs);
-            }
+            case WEATHER:
+                rowsUpdated = db.update(WeatherContract.WeatherEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case LOCATION:
+                rowsUpdated = db.update(WeatherContract.LocationEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException();
         }
-        getContext().getContentResolver().notifyChange(uri, null);
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
 
-        return rowsUdated;
+        return rowsUpdated;
     }
 
     @Override
