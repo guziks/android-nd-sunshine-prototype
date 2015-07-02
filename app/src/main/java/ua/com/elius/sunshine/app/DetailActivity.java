@@ -56,7 +56,7 @@ public class DetailActivity extends ActionBarActivity {
     public static class DetailFragment extends Fragment {
 
         private static final String FORECAST_SHARE_HASHTAG = "#Sunshineapp";
-        private String detailForecast;
+        private String mForecastStr;
         private ShareActionProvider mShareActionProvider;
 
         public DetailFragment() {
@@ -79,7 +79,7 @@ public class DetailActivity extends ActionBarActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
             intent.setType("text/plain");
 
-            intent.putExtra(Intent.EXTRA_TEXT, detailForecast + " " + FORECAST_SHARE_HASHTAG);
+            intent.putExtra(Intent.EXTRA_TEXT, mForecastStr + " " + FORECAST_SHARE_HASHTAG);
 
             return intent;
         }
@@ -89,13 +89,15 @@ public class DetailActivity extends ActionBarActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-//            CharSequence detailForecast = getActivity().getIntent().getExtras().getCharSequence(Intent.EXTRA_TEXT);
-            detailForecast = getActivity().getIntent().getStringExtra(Intent.EXTRA_TEXT);
+            Intent intent = getActivity().getIntent();
+            if (intent != null) {
+                mForecastStr = intent.getDataString();
+            }
 
-            Toast.makeText(getActivity(), detailForecast, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), mForecastStr, Toast.LENGTH_LONG).show();
 
             TextView detailText = (TextView) rootView.findViewById(R.id.detail_text);
-            detailText.setText(detailForecast);
+            detailText.setText(mForecastStr);
 
             return rootView;
         }
