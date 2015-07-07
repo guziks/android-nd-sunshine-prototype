@@ -3,6 +3,7 @@ package ua.com.elius.sunshine.app;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -11,15 +12,22 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
 
+    public static final String FORECASTFRAGMENT_TAG = "FORECASTFRAGMENT";
+
+    String mLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ForecastFragment())
+                    .add(R.id.container, new ForecastFragment(), FORECASTFRAGMENT_TAG)
                     .commit();
         }
+        mLocation = PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getString(String.valueOf(R.string.pref_location_key), "");
         Log.v("EventOrder", "onCreate");
     }
     @Override
@@ -31,6 +39,14 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        String prefLocation = Utility.getPreferredLocation(this);
+        if (!prefLocation.equals(mLocation)) {
+            mLocation = prefLocation;
+            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENT_TAG);
+            ff.onLocationChanged();
+        }
+
         // The activity has become visible (it is now "resumed").
         Log.v("EventOrder", "onResume");
     }
