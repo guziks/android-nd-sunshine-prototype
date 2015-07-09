@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
@@ -12,7 +13,7 @@
         android:id="@+id/list_item_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher" />
+        tools:src="@drawable/ic_launcher" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -25,13 +26,13 @@
             android:id="@+id/list_item_date_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tomorrow" />
+            tools:text="Tomorrow" />
 
         <TextView
             android:id="@+id/list_item_forecast_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sunny" />
+            tools:text="Sunny" />
     </LinearLayout>
 
     <LinearLayout
@@ -43,13 +44,13 @@
             android:id="@+id/list_item_high_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="25°C" />
+            tools:text="25°C" />
 
         <TextView
             android:id="@+id/list_item_low_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="17°C" />
+            tools:text="17°C" />
     </LinearLayout>
 
 
