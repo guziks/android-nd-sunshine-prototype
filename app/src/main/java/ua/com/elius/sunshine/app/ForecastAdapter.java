@@ -60,9 +60,16 @@ public class ForecastAdapter extends CursorAdapter {
         ViewHolder holder = (ViewHolder) view.getTag();
 
         // Read weather icon ID from cursor
-        int weatherId = cursor.getInt(ForecastFragment.COL_WEATHER_ID);
-        // Use placeholder image for now
-        holder.iconView.setImageResource(R.drawable.ic_launcher);
+        int weatherId = cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
+
+        int viewType = getItemViewType(cursor.getPosition());
+        int iconId = -1;
+        switch (viewType) {
+            case VIEW_TYPE_TODAY: iconId = Utility.getArtResourceForWeatherCondition(weatherId); break;
+            case VIEW_TYPE_FUTURE_DAY: iconId = Utility.getIconResourceForWeatherCondition(weatherId); break;
+        }
+
+        holder.iconView.setImageResource(iconId);
 
         long date = cursor.getLong(ForecastFragment.COL_WEATHER_DATE);
         holder.dateView.setText(Utility.getFriendlyDayString(context, date));
