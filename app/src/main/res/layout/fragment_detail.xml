@@ -22,13 +22,13 @@
                 android:id="@+id/detail_day_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tomorrow" />
+                tools:text="Tomorrow" />
 
             <TextView
                 android:id="@+id/detail_date_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="June 24" />
+                tools:text="June 24" />
         </LinearLayout>
 
         <LinearLayout
@@ -47,13 +47,13 @@
                     android:id="@+id/detail_high_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="25°C" />
+                    tools:text="25°C" />
 
                 <TextView
                     android:id="@+id/detail_low_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="17°C" />
+                    tools:text="17°C" />
             </LinearLayout>
 
             <LinearLayout
@@ -67,13 +67,13 @@
                     android:id="@+id/detail_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_launcher" />
+                    tools:src="@drawable/ic_launcher" />
 
                 <TextView
                     android:id="@+id/detail_forecast_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sunny" />
+                    tools:text="Sunny" />
             </LinearLayout>
 
         </LinearLayout>
@@ -87,19 +87,19 @@
                 android:id="@+id/detail_humidity_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Humidity: 85%" />
+                tools:text="Humidity: 85%" />
 
             <TextView
                 android:id="@+id/detail_wind_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Wind: 6 km/H NW" />
+                tools:text="Wind: 6 km/H NW" />
 
             <TextView
                 android:id="@+id/detail_pressure_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1014 hPa" />
+                tools:text="1014 hPa" />
 
         </LinearLayout>
 

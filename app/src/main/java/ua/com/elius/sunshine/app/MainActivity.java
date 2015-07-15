@@ -3,13 +3,14 @@ package ua.com.elius.sunshine.app;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements ForecastFragment.Callback {
 
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
@@ -48,14 +49,19 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        String prefLocation = Utility.getPreferredLocation(this);
-        if (!prefLocation.equals(mLocation)) {
-            mLocation = prefLocation;
+        String location = Utility.getPreferredLocation( this );
+        // update the location in our second pane using the fragment manager
+        if (location != null && !location.equals(mLocation)) {
             ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
+            if ( null != ff ) {
+                ff.onLocationChanged();
+            }
+            DetailFragment df = (DetailFragment)getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+            if ( null != df ) {
+                df.onLocationChanged(location);
+            }
+            mLocation = location;
         }
-
-        // The activity has become visible (it is now "resumed").
         Log.v("EventOrder", "onResume");
     }
     @Override
@@ -117,5 +123,22 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(Uri contentURI) {
+        if (mTwoPane) {
+            Fragment detailFragment = new DetailFragment();
+            Bundle args = new Bundle();
+            args.putParcelable(DetailFragment.DETAIL_URI, contentURI);
+            detailFragment.setArguments(args);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.weather_detail_container, detailFragment, DETAILFRAGMENT_TAG)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, DetailActivity.class).setData(contentURI);
+            startActivity(intent);
+        }
     }
 }
