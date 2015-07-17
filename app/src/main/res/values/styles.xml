@@ -27,4 +27,9 @@
         for two-pane layout -->
     </style>
 
+    <style name="TodayItem">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@color/sunshine_light_blue</item>
+    </style>
+
 </resources>
