@@ -15,6 +15,8 @@
  */
 package ua.com.elius.sunshine.app;
 
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,6 +35,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import ua.com.elius.sunshine.app.data.WeatherContract;
+import ua.com.elius.sunshine.app.service.SunshineService;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link ListView} layout.
@@ -43,7 +46,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     private static final int FORECAST_LOADER = 0;
 
-    private final String SELECTED_KEY = "position";
+    private static final String SELECTED_KEY = "position";
+
+    public static final String LOCATION_KEY = "location";
 
     private static final String[] FORECAST_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
@@ -174,9 +179,15 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     private void updateWeather() {
-        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
+//        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
+//        weatherTask.execute(location);
+        Context context = getActivity();
+
         String location = Utility.getPreferredLocation(getActivity());
-        weatherTask.execute(location);
+        Intent intent = new Intent(context, SunshineService.class);
+        intent.putExtra(LOCATION_KEY, location);
+
+        getActivity().startService(intent);
     }
 
     @Override

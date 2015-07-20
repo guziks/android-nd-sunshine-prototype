@@ -39,7 +39,11 @@
 
         <provider
             android:name=".data.WeatherProvider"
-            android:authorities="ua.com.elius.sunshine.app"></provider>
+            android:authorities="ua.com.elius.sunshine.app" />
+
+        <service
+            android:name=".service.SunshineService" />
+
     </application>
 
 </manifest>
