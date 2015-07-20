@@ -4,55 +4,67 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/touch_selector"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="16dp">
+    android:gravity="center_vertical">
 
     <LinearLayout
+        style="@style/TodayItem"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="60dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
         <TextView
             android:id="@+id/list_item_date_textview"
+            style="@style/TodayItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tomorrow" />
+            android:text="Tomorrow"
+            android:textAppearance="?android:textAppearanceLarge" />
 
         <TextView
             android:id="@+id/list_item_high_textview"
+            style="@style/TodayItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="25°C" />
+            android:text="25°C"
+            android:textSize="72sp" />
 
         <TextView
             android:id="@+id/list_item_low_textview"
+            style="@style/TodayItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="17°C" />
+            android:text="17°C"
+            android:textSize="36sp" />
     </LinearLayout>
 
     <LinearLayout
+        style="@style/TodayItem"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingLeft="16dp">
+        android:paddingTop="48dp">
 
         <ImageView
             android:id="@+id/list_item_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TodayItem"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/ic_launcher" />
 
         <TextView
             android:id="@+id/list_item_forecast_textview"
+            style="@style/TodayItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sunny" />
+            android:paddingTop="16dp"
+            android:text="Sunny"
+            android:textAppearance="?android:textAppearanceLarge" />
     </LinearLayout>
 
 </LinearLayout>
