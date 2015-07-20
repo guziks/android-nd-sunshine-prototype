@@ -32,4 +32,12 @@
         <item name="android:background">@color/sunshine_light_blue</item>
     </style>
 
+    <style name="PrimaryInfo">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="SecondaryInfo">
+        <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
 </resources>
