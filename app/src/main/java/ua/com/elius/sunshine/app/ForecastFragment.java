@@ -15,6 +15,8 @@
  */
 package ua.com.elius.sunshine.app;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -179,15 +181,22 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     private void updateWeather() {
-//        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
-//        weatherTask.execute(location);
         Context context = getActivity();
 
-        String location = Utility.getPreferredLocation(getActivity());
-        Intent intent = new Intent(context, SunshineService.class);
-        intent.putExtra(LOCATION_KEY, location);
+        String location = Utility.getPreferredLocation(context);
 
-        getActivity().startService(intent);
+        AlarmManager alarmMgr;
+        PendingIntent alarmIntent;
+
+        alarmIntent = PendingIntent.getBroadcast(context,
+                0,
+                new Intent(context, SunshineService.AlarmReceiver.class)
+                        .putExtra(ForecastFragment.LOCATION_KEY, location),
+                PendingIntent.FLAG_ONE_SHOT
+        );
+
+        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, alarmIntent);
     }
 
     @Override

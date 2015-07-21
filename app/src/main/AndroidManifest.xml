@@ -3,6 +3,7 @@
     package="ua.com.elius.sunshine.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -43,6 +44,11 @@
 
         <service
             android:name=".service.SunshineService" />
+
+        <receiver
+            android:name=".service.SunshineService$AlarmReceiver"
+            android:enabled="true">
+        </receiver>
 
     </application>
 

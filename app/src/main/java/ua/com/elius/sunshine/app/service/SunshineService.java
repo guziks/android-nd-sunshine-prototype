@@ -1,8 +1,10 @@
 package ua.com.elius.sunshine.app.service;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -234,6 +236,8 @@ public class SunshineService extends IntentService{
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d(LOG_TAG, "Start handling intent");
+
         // If there's no zip code, there's nothing to look up.  Verify location exists.
         if (!intent.hasExtra(ForecastFragment.LOCATION_KEY)) {
             return;
@@ -323,5 +327,18 @@ public class SunshineService extends IntentService{
 
         // This will only happen if there was an error getting or parsing the forecast.
         return;
+    }
+
+    public static class AlarmReceiver extends BroadcastReceiver {
+        private final String LOG_TAG = AlarmReceiver.class.getSimpleName();
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LOG_TAG, "onReceive");
+            String location = intent.getStringExtra(ForecastFragment.LOCATION_KEY);
+            Intent serviceIntent = new Intent(context, SunshineService.class);
+            intent.putExtra(ForecastFragment.LOCATION_KEY, location);
+            context.startService(serviceIntent);
+        }
     }
 }
