@@ -15,10 +15,7 @@
  */
 package ua.com.elius.sunshine.app;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,7 +34,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import ua.com.elius.sunshine.app.data.WeatherContract;
-import ua.com.elius.sunshine.app.service.SunshineService;
+import ua.com.elius.sunshine.app.sync.SunshineSyncAdapter;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link ListView} layout.
@@ -183,20 +180,21 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private void updateWeather() {
         Context context = getActivity();
 
-        String location = Utility.getPreferredLocation(context);
-
-        AlarmManager alarmMgr;
-        PendingIntent alarmIntent;
-
-        alarmIntent = PendingIntent.getBroadcast(context,
-                0,
-                new Intent(context, SunshineService.AlarmReceiver.class)
-                        .putExtra(ForecastFragment.LOCATION_KEY, location),
-                PendingIntent.FLAG_ONE_SHOT
-        );
-
-        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        alarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, alarmIntent);
+//        String location = Utility.getPreferredLocation(context);
+//
+//        AlarmManager alarmMgr;
+//        PendingIntent alarmIntent;
+//
+//        alarmIntent = PendingIntent.getBroadcast(context,
+//                0,
+//                new Intent(context, SunshineService.AlarmReceiver.class)
+//                        .putExtra(ForecastFragment.LOCATION_KEY, location),
+//                PendingIntent.FLAG_ONE_SHOT
+//        );
+//
+//        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+//        alarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, alarmIntent);
+        SunshineSyncAdapter.syncImmediately(context);
     }
 
     @Override
