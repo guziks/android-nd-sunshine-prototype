@@ -42,14 +42,6 @@
                 android:value="ua.com.elius.sunshine.app.MainActivity" />
         </activity>
 
-        <service
-            android:name=".service.SunshineService" />
-
-        <receiver
-            android:name=".service.SunshineService$AlarmReceiver"
-            android:enabled="true">
-        </receiver>
-
         <!-- SyncAdapter's dummy authentication service -->
         <service
             android:name=".sync.SunshineAuthenticatorService"
