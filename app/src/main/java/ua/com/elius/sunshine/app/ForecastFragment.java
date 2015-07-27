@@ -16,6 +16,7 @@
 package ua.com.elius.sunshine.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -116,6 +117,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             updateWeather();
             return true;
         }
+        if (id == R.id.action_view_location) {
+            openPreferredLocationInMap();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -248,5 +253,31 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
          * DetailFragmentCallback for when an item has been selected.
          */
         public void onItemSelected(Uri contentURI);
+    }
+
+    private void openPreferredLocationInMap() {
+
+        if (mForecastAdapter != null) {
+            Cursor c = mForecastAdapter.getCursor();
+            if (c != null) {
+                c.moveToPosition(0);
+                String latitude;
+                String longitude;
+                latitude = c.getString(COL_COORD_LAT);
+                longitude = c.getString(COL_COORD_LONG);
+
+                Uri geoLocation = Uri.parse("geo:" + latitude + "," + longitude);
+                Log.d(LOG_TAG, geoLocation.toString());
+
+                Intent viewLocationIntent;
+                viewLocationIntent = new Intent();
+                viewLocationIntent.setAction(Intent.ACTION_VIEW);
+                viewLocationIntent.setData(geoLocation);
+
+                if (viewLocationIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(viewLocationIntent);
+                }
+            }
+        }
     }
 }
