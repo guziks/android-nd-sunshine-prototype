@@ -260,7 +260,14 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 inserted = mContext.getContentResolver().bulkInsert(WeatherContract.WeatherEntry.CONTENT_URI, cvArray);
             }
 
-            notifyWeather();
+            boolean notificationsEnabled =
+                PreferenceManager.getDefaultSharedPreferences(mContext)
+                    .getBoolean(mContext.getString(R.string.pref_notifications_key), false);
+
+            if (notificationsEnabled) {
+                notifyWeather();
+                Log.d(LOG_TAG, "Show notification");
+            }
 
             Log.d(LOG_TAG, "FetchWeatherTask Complete. " + cVVector.size() + " Inserted");
 
