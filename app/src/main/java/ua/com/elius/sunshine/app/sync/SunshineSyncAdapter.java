@@ -258,15 +258,19 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
                 inserted = mContext.getContentResolver().bulkInsert(WeatherContract.WeatherEntry.CONTENT_URI, cvArray);
-            }
 
-            boolean notificationsEnabled =
-                PreferenceManager.getDefaultSharedPreferences(mContext)
-                    .getBoolean(mContext.getString(R.string.pref_notifications_key), false);
+                mContext.getContentResolver().delete(WeatherContract.WeatherEntry.CONTENT_URI,
+                        WeatherContract.WeatherEntry.COLUMN_DATE + " <= ?",
+                        new String[]{Long.toString(dayTime.setJulianDay(julianStartDay - 1))});
 
-            if (notificationsEnabled) {
-                notifyWeather();
-                Log.d(LOG_TAG, "Show notification");
+                boolean notificationsEnabled =
+                        PreferenceManager.getDefaultSharedPreferences(mContext)
+                                .getBoolean(mContext.getString(R.string.pref_notifications_key), false);
+
+                if (notificationsEnabled) {
+                    notifyWeather();
+                    Log.d(LOG_TAG, "Show notification");
+                }
             }
 
             Log.d(LOG_TAG, "FetchWeatherTask Complete. " + cVVector.size() + " Inserted");
